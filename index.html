@@ -1,78 +1,79 @@
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>巧虎</title>
-  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-  <!-- <link rel="icon" href="icon.png" type="image/png">-->
-  <!-- 引用 遊戲1 的外部 CSS -->
-  
-</head>
-<body>
-  <!-- Loading 画面 -->
-  <div id="loadingScreen">
-    <p>Loading...</p>
-    <div class="spinner"></div> <!-- 這裡可以是動畫效果 -->
-  </div>
+<html>
+  <head>
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+        <a-assets>
+          <img id="skyTexture"
+            src="https://cdn.aframe.io/360-image-gallery-boilerplate/img/sechelt.jpg">
+        <img id="imageTexture" src="https://eason112.github.io/vrcardbord/asset/image.png">
+        <video id="video" src="https://eason112.github.io/vrcardbord/asset/video.mp4" autoplay="false" loop="false"></video>
+        </a-assets>
+      
+      
+        <a-sky src="#skyTexture"></a-sky>
+        <a-plane class="clickable" id="imagePlane" position="4 1 -3" rotation="0 -45 0" width="3" height="2" src="#imageTexture"></a-plane>
+    
+          <!-- 影片播放器 -->
+        <a-video id="videoPlayer" src="#video" position="4 1 -3" rotation="0 -45 0" width="3" height="2" visible="false"></a-video>
 
-  <!-- 遊戲1：挖蛤蠣 -->
-  <div id="game1" class="game-container" style="display: none;">
-    <audio id="bgm" loop>
-      <source src="littlegame/new/sound/bgm.mp3" type="audio/mp3" preload="auto">
-      您的瀏覽器不支援此音訊格式。
-    </audio>
-    <audio id="bgm2">
-      <source src="littlegame/new/sound/bgm2.mp3" type="audio/mp3"preload="auto">
-      您的瀏覽器不支援此音訊格式。
-    </audio>
-    <audio id="loginbgm" loop>
-      <source src="littlegame/new/sound/loginbgm.mp3" type="audio/mp3"preload="auto">
-      您的瀏覽器不支援此音訊格式。
-    </audio>
-    <audio id="majorbgm" loop>
-      <source src="littlegame/new/sound/majorbgm.mp3" type="audio/mp3"preload="auto">
-      您的瀏覽器不支援此音訊格式。
-    </audio>
-    <div id="canvasContainer1">
-      <canvas id="gameCanvas1"></canvas>
-    </div>
-  </div>
+          
+        <a-camera>
+            <a-entity
+            raycaster="objects:.clickable"
+            id="cursor"
+            cursor="fuse: true; fuseTimeout:3000"
+            animation__fusing="property: scale; startEvents: fusing; dur: 3000; from: 1 1 1; to: 0.1 0.1 0.1"
+            animation__reset="property: scale; startEvents: mouseleave; dur: 1000; to: 1 1 1"
+            material="color: black; shader: flat"
+            position="0 0 -3"
+            geometry="primitive: ring; radius-inner:0.02; radius-outer:0.04;"></a-entity>
+        </a-camera>
+      </a-scene>
+  </body>
+  <script>
+    // 用來追蹤圖片是否被注視的狀態
+    let isLookingAtImage = false;
+    let timer;
+    let leavetimer;
 
-  <!-- 遊戲2：巧虎 -->
-  <div id="game2" class="game-container" style="display: none;">
-    <video id="myVideo"style="display: none;">
-      <source src="major/videos/video.mp4" type="video/mp4">
-      您的瀏覽器不支援影片標籤。
-    </video>
-    <div id="canvasContainer2">
-        <canvas id="gameCanvas2"></canvas>
-    </div>
-  </div>
+    
+    const cursor = document.querySelector('#cursor');  // 光标元素
 
-  <div id="login" class="game-container" style="display: block;">
-    <div id="canvasContainer">
-        <canvas id="loginCanvas"></canvas>
-        <input id="inputField" type="text">
-    </div>
-  </div>
+    // 當光標進入圖片區域時
+    document.querySelector('#imagePlane').addEventListener('mouseenter', function() {
+      isLookingAtImage = true;
+      // 設置光标顏色變為白色
+      cursor.setAttribute('material', 'color: white');
+      
+      // 開始縮小光標的動畫
+      //cursor.setAttribute('scale', '0.2 0.2 0.2');  // 初始缩小光标
+      clearTimeout(leavetimer);  // 取消定時器
+      // 設置定時器
+      timer = setTimeout(() => {
+        if (isLookingAtImage) {
+          // 顯示影片
+            document.querySelector('#videoPlayer').setAttribute('visible', 'true');
+            document.querySelector('#videoPlayer').play();
+        }
+      }, 3000);  // 3秒後播放影片
+    });
 
-  <script src="https://www.youtube.com/iframe_api"></script>
-  <script src="all.js"></script>
-  <script src="login.js"></script>
-
-  <!-- 引用 遊戲2 的外部 JavaScript -->
-  <script id="game1-script2" src="littlegame/new/sound.js" type="text/javascript"></script>
-  <script id="game2-script" src="major/game.js" type="text/javascript"></script>
-    <!-- 引用 遊戲1 的外部 JavaScript -->
-  <script id="game1-script1" src="littlegame/new/canvasscript.js" type="text/javascript"></script>
-
-
-
-   <link id="game1-stylesheet" rel="stylesheet" href="littlegame/new/canvas.css">
-
-  <link id="game2-stylesheet" rel="stylesheet" href="major/style.css">
-
-  <link rel="stylesheet" href="style.css">
-</body>
+    // 當光標離開圖片區域時
+    document.querySelector('#imagePlane').addEventListener('mouseleave', function() {
+      isLookingAtImage = false;
+      clearTimeout(timer);  // 取消定時器
+      // 隱藏影片
+      //document.querySelector('#videoPlayer').setAttribute('visible', 'false');
+      leavetimer = setTimeout(() => {
+          // 顯示影片
+            //document.querySelector('#videoPlayer').setAttribute('visible', 'false');
+            document.querySelector('#videoPlayer').pause();
+            document.querySelector('#videoPlayer').currentTime=0; 
+      }, 3000);  // 3秒後播放影片
+      // 恢復光标狀態
+      cursor.setAttribute('material', 'color: black');
+    });
+  </script>
 </html>
