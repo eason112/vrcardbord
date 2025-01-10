@@ -16,7 +16,6 @@ let videoplayer = document.querySelector('#videoplayer');
 let toggleplay=document.querySelector('#videoControls');
 const cursor = document.querySelector('#cursor');  // 光标元素
 
-document.querySelector('a-scene').enterVR()
 // 當光標進入圖片區域時
 images.forEach(function(imagePlane, index) {
     imagePlane.addEventListener('mouseenter', function() {
