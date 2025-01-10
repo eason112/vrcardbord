@@ -21,10 +21,12 @@ const scene = document.querySelector('#scene');
 const vrButton = document.querySelector('#vr-button');
 
         // 當按鈕被點擊時，啟動 VR 模式
-vrButton.addEventListener('click', function () {
-        scene.enterVR();
+vrButton.addEventListener('mousedown', function () {
+    scene.enterVR();
 });
-
+vrButton.addEventListener('touchstart', function () {
+    scene.enterVR();
+});
 // 當光標進入圖片區域時
 images.forEach(function(imagePlane, index) {
     imagePlane.addEventListener('mouseenter', function() {
