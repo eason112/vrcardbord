@@ -85,7 +85,7 @@ images.forEach(function(imagePlane, index) {
                     
                     setTimeout(() => {
                         currentvideo.play();
-                        //currentvideo.muted=false;
+                        currentvideo.muted=false;
                     },1000);
 
                     toggleplay.setAttribute('src','#pause');
