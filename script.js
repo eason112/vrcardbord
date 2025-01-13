@@ -39,6 +39,10 @@ document.body.addEventListener('mousedown', function() {
     var hintElement = document.getElementById('hint');
     hintElement.style.display = 'none'; // 點擊後隱藏提示
 });
+
+videos.forEach(function(video){
+    video.pause();
+});
 // 當光標進入圖片區域時
 images.forEach(function(imagePlane, index) {
     imagePlane.addEventListener('mouseenter', function() {
