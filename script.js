@@ -96,7 +96,7 @@ images.forEach(function(imagePlane, index) {
             }, 3000);  // 3秒後播放影片
             // 恢復光标狀態
         }
-        cursor.setAttribute('material', 'color: black');
+        cursor.setAttribute('material', 'color: red');
     });
 });
 
@@ -133,5 +133,5 @@ toggleplay.addEventListener('mouseleave', function() {
         currentvideo.pause();
 
       }, 3000);  // 3秒後播放影片
-    cursor.setAttribute('material', 'color: black');
+    cursor.setAttribute('material', 'color: red');
 });
