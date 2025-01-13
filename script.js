@@ -23,9 +23,21 @@ const vrButton = document.querySelector('#vr-button');
         // 當按鈕被點擊時，啟動 VR 模式
 vrButton.addEventListener('mousedown', function () {
     scene.enterVR();
+    vrButton.style.display= 'none';
+    
 });
 vrButton.addEventListener('touchstart', function () {
     scene.enterVR();
+    vrButton.style.display= 'none';
+});
+
+document.body.addEventListener('touchstart', function() {
+    var hintElement = document.getElementById('hint');
+    hintElement.style.display = 'none'; // 點擊後隱藏提示
+});
+document.body.addEventListener('mousedown', function() {
+    var hintElement = document.getElementById('hint');
+    hintElement.style.display = 'none'; // 點擊後隱藏提示
 });
 // 當光標進入圖片區域時
 images.forEach(function(imagePlane, index) {
